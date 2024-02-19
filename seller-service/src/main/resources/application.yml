@@ -1,0 +1,37 @@
+server:
+  port: 9002
+
+#logging:
+#  level:
+#    root: DEBUG
+
+spring:
+  application:
+    name: seller-service
+  config:
+    import: optional:configserver:${http://localhost:9003}/
+  datasource:
+    continue-on-error: true
+    initialization-mode: always
+    initialize: true
+    password: seller_123
+    url: jdbc:mysql://localhost:3306/seller_service
+    username: seller
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLDialect
+          format_sql: true
+  
+
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: ${EUREKA_SERVICE_ADDRESS:http://localhost:8761/eureka}
