@@ -46,9 +46,8 @@ public class SellerServiceImpl implements SellerService {
     private MakerCheckerRepository makerCheckerRepository;
     @Autowired
     private AdminRepository adminRepository;
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void addSeller(Seller seller) throws JsonProcessingException {
@@ -67,7 +66,7 @@ public class SellerServiceImpl implements SellerService {
         roles.add(role);
         seller.getUser().setRoles(roles);
         seller.getUser().setUserType(UserType.SELLER);
-//        seller.getUser().setPassword(passwordEncoder.encode(seller.getUser().getPassword()));
+        seller.getUser().setPassword(passwordEncoder.encode(seller.getUser().getPassword()));
         makerChecker.setEntityType(EntityType.SELLER);
         makerChecker.setNewState(objectMapper.writeValueAsString(seller));
         makerChecker.setRequestStatus(RequestStatus.PENDING);
