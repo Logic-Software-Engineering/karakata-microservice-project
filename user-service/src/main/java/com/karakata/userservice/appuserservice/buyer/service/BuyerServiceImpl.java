@@ -32,8 +32,8 @@ public class BuyerServiceImpl implements BuyerService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Buyer addBuyer(Buyer buyer) {
@@ -48,7 +48,7 @@ public class BuyerServiceImpl implements BuyerService {
         roles.add(role);
         buyer.getUser().setRoles(roles);
         buyer.getUser().setUserType(UserType.BUYER);
-//        buyer.getUser().setPassword(passwordEncoder.encode(buyer.getUser().getPassword()));
+        buyer.getUser().setPassword(passwordEncoder.encode(buyer.getUser().getPassword()));
         return buyerRepository.save(buyer);
     }
 
