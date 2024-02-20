@@ -1,4 +1,4 @@
-package com.karakata.userservice.appuserservice.config.security;//package com.logicgate.appuserservice.config.security;
+//package com.karakata.userservice.appuserservice.config.security.webconfig;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +13,8 @@ package com.karakata.userservice.appuserservice.config.security;//package com.lo
 //    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 //        httpSecurity
 //                .csrf().disable()
+//                .authorizeRequests().anyRequest().permitAll()
+//                .and()
 //                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //        return httpSecurity.build();
 //    }
