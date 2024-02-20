@@ -1,4 +1,4 @@
-package com.logicgate.sellerservice;
+package com.karakata.sellerservice;
 
 import org.testcontainers.containers.MySQLContainer;
 
