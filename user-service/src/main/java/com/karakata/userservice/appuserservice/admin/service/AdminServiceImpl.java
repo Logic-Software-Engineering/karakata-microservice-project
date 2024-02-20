@@ -14,6 +14,7 @@ import com.karakata.userservice.appuserservice.roles.repository.RoleRepository;
 import com.karakata.userservice.appuserservice.staticdata.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,8 @@ public class AdminServiceImpl implements AdminService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Admin addAdmin(Admin admin) {
@@ -51,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
         admin.getUser().setRoles(roles);
         admin.getUser().setUserType(UserType.ADMINISTRATOR);
         admin.getUser().setIsEnabled(true);
-//        admin.getUser().setPassword(passwordEncoder.encode(admin.getUser().getPassword()));
+        admin.getUser().setPassword(passwordEncoder.encode(admin.getUser().getPassword()));
         return adminRepository.save(admin);
     }
 
