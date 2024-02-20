@@ -1,4 +1,4 @@
-package com.logicgate.buyerservice;
+package com.karakata.buyerservice;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
