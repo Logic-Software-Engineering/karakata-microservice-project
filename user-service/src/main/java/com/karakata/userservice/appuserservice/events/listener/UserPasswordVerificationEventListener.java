@@ -40,7 +40,7 @@ public class UserPasswordVerificationEventListener implements ApplicationListene
         String to= user.getEmail();
         String from="fakolujos@gmail.com";
         String subject="Password Reset";
-        String link= event.getApplicationUrl()+"/api/farmmart/savePassword?token="+token;
+        String link= event.getApplicationUrl()+"/api/karakata/savePassword?token="+token;
         String text="Dear "+user.getUsername()+",\n\n"+"Click on the link in your inbox to reset your password "+link;
 
         SimpleMailMessage simpleMailMessage=new SimpleMailMessage();

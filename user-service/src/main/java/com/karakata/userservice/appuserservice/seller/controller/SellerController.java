@@ -2,7 +2,9 @@ package com.karakata.userservice.appuserservice.seller.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.karakata.userservice.appuserservice.events.event.AdminApprovalEvent;
 import com.karakata.userservice.appuserservice.events.event.RegistrationEvent;
+import com.karakata.userservice.appuserservice.events.event.SellerNotificationEvent;
 import com.karakata.userservice.appuserservice.makerchecker.model.MakerChecker;
 import com.karakata.userservice.appuserservice.makerchecker.service.MakerCheckerService;
 import com.karakata.userservice.appuserservice.seller.dto.SellerApproval;
@@ -31,7 +33,8 @@ public record SellerController(SellerService sellerService, ModelMapper modelMap
     public ResponseEntity<String> addSeller(@RequestBody SellerRequest sellerRequest, HttpServletRequest request) throws JsonProcessingException {
         Seller seller = modelMapper.map(sellerRequest, Seller.class);
         sellerService.addSeller(seller);
-        //create an email message to the seller
+        publisher.publishEvent(new SellerNotificationEvent(applicationUrl(request), seller));
+//        publisher.publishEvent(new AdminApprovalEvent(applicationUrl(request), ));
         return new ResponseEntity<>("Your registration is undergoing approval, an email will be sent to you once you" +
                 " registration is approved to verify your email", HttpStatus.OK);
     }
@@ -79,18 +82,25 @@ public record SellerController(SellerService sellerService, ModelMapper modelMap
 
     @PutMapping("/editSeller")
     public ResponseEntity<String> editSeller(@RequestBody SellerUpdate sellerUpdate,
-                                             @RequestParam("makerCheckerId") String makerCheckerId) throws JsonProcessingException {
+                                             @RequestParam("makerCheckerId") String makerCheckerId,
+                                             HttpServletRequest request) throws JsonProcessingException {
         Seller seller = modelMapper.map(sellerUpdate, Seller.class);
         sellerService.editSeller(makerCheckerId, seller);
-        //create an email message to the seller
+        publisher.publishEvent(new SellerNotificationEvent(applicationUrl(request), seller));
+//        publisher.publishEvent(new AdminApprovalEvent(applicationUrl(request), admin));
         return new ResponseEntity<>("Your update is awaiting approval", HttpStatus.OK);
     }
 
     @PutMapping("/approveSellerUpdate")
-    public ResponseEntity<String> approveSellerUpdate(@RequestBody SellerApproval sellerApproval) throws JsonProcessingException {
+    public ResponseEntity<String> approveSellerUpdate(@RequestBody SellerApproval sellerApproval,
+                                                      HttpServletRequest request) throws JsonProcessingException {
         sellerService.approveSellerUpdate(sellerApproval.getMakerCheckerId(), sellerApproval.getAdminId(),
                 sellerApproval.getRequestStatus());
+
         //Create an email to send notification to seller for update
+        MakerChecker makerChecker=makerCheckerService.fetchMakerCheckerById(sellerApproval.getMakerCheckerId());
+        Seller seller=sellerService.fetchSellerById(makerChecker.getEntityId());
+        publisher.publishEvent(new SellerNotificationEvent(applicationUrl(request), seller));
         return new ResponseEntity<>("You update has been approved", HttpStatus.OK);
     }
 

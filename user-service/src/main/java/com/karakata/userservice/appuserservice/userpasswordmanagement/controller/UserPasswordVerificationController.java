@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/karakata/password")
+@RequestMapping(path = "/api/karakata")
 public record UserPasswordVerificationController(UserPasswordVerificationService userPasswordVerificationService,
                                                  ApplicationEventPublisher publisher, UserService userService) {
 
@@ -29,13 +29,17 @@ public record UserPasswordVerificationController(UserPasswordVerificationService
     }
 
     @PostMapping("/savePassword")
-    public String savePassword(@RequestBody PasswordToken passwordTokenModel, @RequestParam("token") String token) {
+    public String savePassword(@RequestBody PasswordToken passwordToken, @RequestParam("token") String token) {
+        String result= userPasswordVerificationService.validatePasswordToken(token);
+        if (!result.equalsIgnoreCase("invalid")){
+            return "Invalid token";
+        }
         Optional<User> appUser = userPasswordVerificationService.findUserByPasswordToken(token);
 
         if (appUser.isPresent()) {
-            userPasswordVerificationService.changeUserPassword(appUser.get(), passwordTokenModel.getNewPassword());
-        }
-        return "Password Reset Successfully";
+            userPasswordVerificationService.changeUserPassword(appUser.get(), passwordToken.getNewPassword());
+            return "Password Reset Successfully";
+        }else return "invalid token";
     }
 
     @PostMapping("/changePassword")

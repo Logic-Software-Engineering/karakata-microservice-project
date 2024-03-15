@@ -1,0 +1,11 @@
+package com.karakata.authserver.address.exception;
+
+public class AddressNotFoundException extends RuntimeException{
+    public AddressNotFoundException() {
+        super();
+    }
+
+    public AddressNotFoundException(String message) {
+        super(message);
+    }
+}

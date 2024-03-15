@@ -7,6 +7,7 @@ import com.karakata.userservice.appuserservice.userpasswordmanagement.exception.
 import com.karakata.userservice.appuserservice.userpasswordmanagement.model.UserPasswordVerification;
 import com.karakata.userservice.appuserservice.userpasswordmanagement.repository.UserPasswordVerificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,8 @@ public class UserPasswordVerificationServiceImpl implements UserPasswordVerifica
     @Autowired
     private UserPasswordVerificationRepository userPasswordVerificationRepository;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserPasswordVerification findByToken(String token) {
@@ -61,13 +62,12 @@ public class UserPasswordVerificationServiceImpl implements UserPasswordVerifica
 
     @Override
     public void changeUserPassword(User user, String newPassword) {
-//        user.setPassword(passwordEncoder.encode(newPassword)); //to work on this
+        user.setPassword(passwordEncoder.encode(newPassword)); //to work on this-done
         userRepository.save(user);
     }
 
     @Override
-    public Boolean checkIfOldPasswordExist(User User, String oldPassword) {
-//        return passwordEncoder.matches(user.getPassword(), oldPassword);
-        return false;//To work on this
+    public Boolean checkIfOldPasswordExist(User user, String oldPassword) {
+        return passwordEncoder.matches(user.getPassword(), oldPassword);
     }
 }

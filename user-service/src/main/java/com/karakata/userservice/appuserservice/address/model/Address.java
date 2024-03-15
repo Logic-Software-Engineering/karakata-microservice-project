@@ -40,8 +40,9 @@ public class Address implements Serializable {
     @Column(nullable = false, updatable = false)
     private Date createdAt;
 
+
+    @UpdateTimestamp
     @Column(insertable = false)
     @Temporal(TemporalType.DATE)
-    @UpdateTimestamp
     private Date updatedAt;
 }

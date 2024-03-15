@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +22,8 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE cart_item SET deleted=true WHERE id=?")
+@Where(clause = "deleted = false")
 public class MakerChecker implements Serializable {
     @Id
     private String id;
@@ -38,6 +42,7 @@ public class MakerChecker implements Serializable {
 
     @Column(name = "checker_id")
     private Long adminId;
+    private boolean deleted = Boolean.FALSE;
 
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
